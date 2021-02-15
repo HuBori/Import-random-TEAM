@@ -1,11 +1,11 @@
-print_table()
-ask_field()
-menu() #choose table size (and AI vs player vagy player vs player)
-check_winner() #Oszlopokat sorokat és átlókat ellenőriz, táblamérettől függetlenül
-game_over() #Kiírja hogy ki nyert és újraindítja a játékot (a menüvel) ha igény van rá, ha nincs, kilép
-round() #Köröket kezeli (függvényeket hív meg)
+print_table() -> Davies
+ask_field() -> Davies
+menu() #choose table size (and AI vs player vagy player vs player) -> Davies
+check_winner() #Oszlopokat sorokat és átlókat ellenőriz, táblamérettől függetlenül -> Bori
+game_over() #Kiírja hogy ki nyert és újraindítja a játékot (a menüvel) ha igény van rá, ha nincs, kilép -> Bori
+round() #Köröket kezeli (függvényeket hív meg) -> Bori
 
-play()
+play() -> Bori
 
 opcionális:
 	graphic_welcome()
