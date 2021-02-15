@@ -1,0 +1,18 @@
+print_table()
+ask_field()
+menu() #choose table size (and AI vs player vagy player vs player)
+check_winner() #Oszlopokat sorokat és átlókat ellenőriz, táblamérettől függetlenül
+game_over() #Kiírja hogy ki nyert és újraindítja a játékot (a menüvel) ha igény van rá, ha nincs, kilép
+round() #Köröket kezeli (függvényeket hív meg)
+
+play()
+
+opcionális:
+	graphic_welcome()
+	graphic_gameover()
+	save() #into a txt file. Menüben lehet menteni, és kiíratni az eredményeket
+	AI (csak ha van rá kapacitás!): #Csak kb.
+		AI_turn() #Kezeli az AI körét
+		minimax() #Ellenőrzi az összes lehetséges lépést, amit őt követve a játékos tehet, kiszámítj a pontokat
+				és az alapján kiválasztja a neki legoptimálisabbat
+		https://gsurma.medium.com/tic-tac-toe-creating-unbeatable-ai-with-minimax-algorithm-8af9e52c1e7d
