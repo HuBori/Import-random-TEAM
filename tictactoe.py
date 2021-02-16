@@ -1,4 +1,5 @@
 import os
+import sys
 import time
 import random
 
@@ -29,7 +30,7 @@ def graphic_welcome():
 
     print(tictactoe)
 
-def graphic_gameover(winner, mode):
+def graphic_gameover(player, mode):
     winner = " ___                      _____\n/\XX\        ____        / /XX/\n\ \XX\      / /XX\      / /XX/      _    ________     ________      ______      _______\n"
     winner += " \ \XX\    / /XXXX\    / /XX/      /X|  | |XXXXXX\   | |XXXXXX\    / /XXXX\    /|XXXXXX\ \n"
     winner += "  \ \XX\  / /XX/\XX\  / /XX/      |/_/  | |X|__/|X|  | |X|__/|X|  | |X|__/X|  | |X|__/|X|\n"
@@ -47,29 +48,26 @@ def graphic_gameover(winner, mode):
     looser += "|/________/    \____/      \____/    |______/      \_____/  |/_/\n"
 
 
-    if mode == "HUMAN-AI" and winner == 0:
+    if mode == "HUMAN-AI" and player == 0:
         print("I won!")
         looser = ""
         print(looser)
-    elif mode == "HUMAN-AI":
-        winner = ""
+    elif mode == "HUMAN-AI" and player == 1:
         print("Congratularions! You are the")
         for i in range(3):
             time.sleep(1)
             print(".")
-        time.sleep(3)
+        time.sleep(1)
         print(winner)
-    elif winner != 3:
-        which = random.randint(1,2)
-        print("Congratulations! Player" + str(which) + " is the")
+    elif winner != -1:
+        print("Congratulations! Player" + str(player-1) + " is the")
         for i in range(3):
             time.sleep(1)
             print(".")
-        time.sleep(3)
-        if winner == which:
-            print(winner)
-        else:
-            print(looser)
+        time.sleep(1)
+        print(winner)
+    else:
+        print("You both are a\n" + looser)
 
 def init_board(): #Davies
     """Returns an empty 3-by-3 board (with .)."""
@@ -160,37 +158,39 @@ def mark(board, player, row, col): #Davies
         else:
             print("Please give me a valid answer!")
             (row, col) = get_move(board, player)
+'''
+def won(board):
+    for i in range(3):
+        if board[i][0] == board[i][1] and board[i][2] == board[i][1]:
+            return True
+        if board[0][i] == board[1][i] and board[2][i] == board[0][i]:
+            return True
+    if board[0][0] == board[1][1] and board[2][2] == board[0][0]:
+        return True
+    elif board[0][2] == board[1][1] and board[2][0] == board[0][2]:
+        return True
+    else:
+        return False
+ '''   
 
 
 def has_won(board, player): #Bori
     """Returns True if player has won the game."""
-    sign = {1: "X", 2: "O"}
-
-    for r in range(len(board)):
-        row = True
-        for c in range(len(board) - 1):
-            if board[r][c] != board[r][c-1] or board[r][c] != sign[player]: # board[r][c + 1] -- [c - 1]
-                row = False
-        if row:
+    #sign = {1: "X", 2: "O"}
+    for i in range(3):
+        if board[i][1] != ".":
+            if board[i][0] == board[i][1] and board[i][2] == board[i][1]:
+                return True
+        if board[0][i] != ".":
+            if board[0][i] == board[1][i] and board[2][i] == board[0][i]:
+                return True
+    if board[1][1] != ".":
+        if board[0][0] == board[1][1] and board[2][2] == board[1][1]:
             return True
-#Efölött van a hiba
-    for c in range(len(board)):
-        column = True
-        for r in range(len(board) - 1):
-            if board[r][c] != sign[player] or board[r][c] != board[r][c-1]: # board[r][c + 1] -- [c - 1]
-                column = False
-        if column:
+        elif board[0][2] == board[1][1] and board[2][0] == board[1][1]:
             return True
-
-    diagonal_right = True
-    diagonal_left = True
-    for i in range(len(board)-1):        
-        if board[i][i] != sign[player] or board[i][i] != board[i+1][i+1]:
-            diagonal_right = False
-        if board[i][-(i+1)] != sign[player] or board[i][-(i+1)] != board[i+1][-i]:
-            diagonal_left = False
-
-    return diagonal_left or diagonal_right
+    else:
+        return False
 
 
 def is_full(board): #Bori
@@ -212,11 +212,14 @@ def print_board(board):
 
 def print_result(winner, mode): #Bori
     """Congratulates winner or proclaims tie (if winner equals zero)."""
-    if winner == 0:
+    
+    if winner == -1:
         print("\nGame Over! It's a tie.")
-    else:
+    elif winner == 1 or winner == 2:
         #print("Congratulations, Player" + str(winner) + "! You won!")
-        graphic_gameover(winner, mode)
+        graphic_gameover(winner + 1, mode)
+    else:
+        print("This should never happen.\n--print_results()")
 
     if input("\nDo you want to save the results?\n1: Yes\n2: No\nYour answer: ") == "1":
         if mode == "HUMAN-HUMAN":
@@ -315,7 +318,7 @@ def tictactoe_game(mode): #Bori
     winner = 0
     if mode == 'HUMAN-AI':
         ai_turn = random.randint(1, 2)
-        print("I am Player" + ai_turn)
+        print("I am Player" + str(ai_turn))
     else:
         ai_turn = 0
 
@@ -335,19 +338,20 @@ def tictactoe_game(mode): #Bori
             time.sleep(1)
             print("It's " + sign[current_player] + "'s turn.\n")
             print_board(board)
-            position = get_ai_move(board, player)
+            position = get_ai_move(board, current_player)
         mark(board, current_player, position[0], position[1])
 
         if has_won(board, current_player):
-            winner = current_player
+            clear_board()
+            print_board(board)
+            print_result(current_player, mode)
+            break
         elif is_full(board):
-            winner = 3
+            clear_board()
+            print_board(board)
+            print_result(-1, mode)
             break
         current_player = (current_player % 2) + 1
-
-    clear_board()
-    print_board(board)
-    print_result(winner, mode)
 
 
 def main_menu(): #Davies
