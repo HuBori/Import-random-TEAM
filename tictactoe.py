@@ -79,19 +79,19 @@ def init_board(): #Davies
 def get_move(board, player):
     valid = False
     while not valid:
-        position = input('Choose field: ')
+        position = input('\nChoose field: ')
 
         if position[0].isalpha() and position[1].isnumeric():
-            if position[1] <= 3 and position[1] >= 1:
-                abc = ('a', 'b', 'c')
+            if int(position[1]) <= 3 and int(position[1]) >= 1:
+                abc = ['a', 'b', 'c']
                 column = -1
                 for letter in range(len(abc)):
-                    if position[0] == letter:
-                        column == letter
-                    row = int(position[1])- 1
+                    if position[0].lower() == abc[letter]:
+                        column = letter
+                row = int(position[1])- 1
                 if column >= 0 and column < 3:
                     valid = True
-                    return tuple(row, column)
+                    return (row, column)
         elif position == 'quit':
             quit()
 
@@ -152,7 +152,14 @@ def get_ai_move(board, player): #Bori
 def mark(board, player, row, col): #Davies
     """Marks the element at row & col on the board for player."""
     sign = {1: "X", 2: "O"}
-    board[row][col] = sign[player]
+    valid = False
+    while not valid:
+        if board[row][col] == ".":
+            board[row][col] = sign[player]
+            valid = True
+        else:
+            print("Please give me a valid answer!")
+            (row, col) = get_move(board, player)
 
 
 def has_won(board, player): #Bori
@@ -162,12 +169,11 @@ def has_won(board, player): #Bori
     for r in range(len(board)):
         row = True
         for c in range(len(board)-1):
-            if board[r][c] == sign[player]:
-                if board[r][c] != board[r][c+1]:
-                    row = False
+            if board[r][c] != board[r][c+1] or board[r][c] != sign[player]:
+                row = False
         if row:
             return True
-
+#Efölött van a hiba
     for c in range(len(board)):
         column = True
         for r in range(len(board) - 1):
@@ -207,7 +213,7 @@ def print_board(board):
 def print_result(winner, mode): #Bori
     """Congratulates winner or proclaims tie (if winner equals zero)."""
     if winner == 0:
-        print("Game Over! It's a tie.")
+        print("\nGame Over! It's a tie.")
     else:
         #print("Congratulations, Player" + str(winner) + "! You won!")
         graphic_gameover(winner, mode)
@@ -318,16 +324,16 @@ def tictactoe_game(mode): #Bori
         clear_board()
 
         if mode == 'HUMAN-HUMAN' or current_player != ai_turn:
-            print("Player" + current_player + ", it's your turn!")
+            print("Player" + str(current_player) + ", it's your turn!\n")
             print_board(board)
             position = get_move(board, current_player)
-        elif mode == 'HUMAN-AI' and current_player == ai_turn:
-            print("It's my turn.")
+        elif mode == 'HUMAN-AI' and str(current_player) == ai_turn:
+            print("It's my turn.\n")
             print_board(board)
             position = get_ai_move(board, player)
         else:
             time.sleep(1)
-            print("It's " + sign[current_player] + "'s turn.")
+            print("It's " + sign[current_player] + "'s turn.\n")
             print_board(board)
             position = get_ai_move(board, player)
         mark(board, current_player, position[0], position[1])
