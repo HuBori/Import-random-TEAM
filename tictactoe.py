@@ -317,17 +317,17 @@ def tictactoe_game(mode): #Bori
         if mode == 'HUMAN-HUMAN' or current_player != ai_turn:
             print("Player" + current_player + ", it's your turn!")
             print_board(board)
-            row, col = get_move(board, current_player)
+            position = get_move(board, current_player)
         elif mode == 'HUMAN-AI' and current_player == ai_turn:
             print("It's my turn.")
             print_board(board)
-            row, col = get_ai_move(board, player)
+            position = get_ai_move(board, player)
         else:
             time.sleep(1)
             print("It's " + sign[current_player] + "'s turn.")
             print_board(board)
-            row, col = get_ai_move(board, player)
-        mark(board, current_player, row, col)
+            position = get_ai_move(board, player)
+        mark(board, current_player, position[0], position[1])
 
         if has_won(board, current_player):
             winner = current_player
