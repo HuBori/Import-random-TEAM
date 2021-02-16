@@ -76,7 +76,7 @@ def init_board(): #Davies
     board = [[".", ".", "."], [".", ".", "."], [".", ".", "."]]
     return board
 
-def get_move():
+def get_move(board, player):
     valid = False
     while not valid:
         position = input('Choose field: ')
@@ -92,6 +92,8 @@ def get_move():
                 if column >= 0 and column < 3:
                     valid = True
                     return tuple(row, column)
+        elif position == 'quit':
+            quit()
 
 
 def get_ai_move(board, player): #Bori
@@ -343,9 +345,19 @@ def tictactoe_game(mode): #Bori
 
 
 def main_menu(): #Davies
-    tictactoe_game('HUMAN-HUMAN')
-    tictactoe_game('HUMAN-AI')
-    save('SAVE GAME')
+    print('[1] HUMAN vs. HUMAN')
+    print('[2] HUMAN vs. AI')
+    print('[3] HIGH SCORES')
+    print('[0] exit')
+
+    option = input('Enter Your option! ')
+    while option != 0:
+        if option == 1:
+            tictactoe_game('HUMAN-HUMAN')
+        elif option == 2:
+            tictactoe_game('HUMAN-AI')
+        elif option == 3:
+            check_scores(input('Who\'s Score are you courious of? '))
 
 if __name__ == '__main__':
     main_menu()
