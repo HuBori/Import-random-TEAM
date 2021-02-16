@@ -2,7 +2,14 @@ import os
 import time
 import random
 
-clear = lambda: os.system('clear')
+def clear_board():
+    try:
+        os.system('cls')
+    except NameError:
+        os.system('clear')
+    finally:
+        pass
+    
 
 def graphic_welcome():
     print("Welcome to")
@@ -10,17 +17,17 @@ def graphic_welcome():
         time.sleep(1)
         print(".")
     time.sleep(2)
-    tic-tac-toe = "  _________                         _                                       _\n"
-    tic-tac-toe += " /XXXXXXXXX|                      /|X|                                    /|X|\n"
-    tic-tac-toe += "|/_ |XX|___/_    ______           ||X|_                  ______           ||X|                    ______\n"
-    tic-tac-toe += "   ||XX|   /X|  / /XXXX\        /|XXXXX|     ________   / /XXXX\        /|XXXXX|      ______     / /XXXX\ \n"
-    tic-tac-toe += "   ||XX|  |/_  | |X|_/|X|  ___ |_  |X|/     / / XXXXX| | |X|_/|X|  ___ |_  |X|/      / /XXXX\   | |X|__/X| \n"
-    tic-tac-toe += "   ||XX|  /|X| | |X| / _  /XXX|  | |X|  _  | |X     X| | |X| / _  /XXX|  | |X|  _   | |X/\ \X|  | |XXXXXX| \n"
-    tic-tac-toe += "   ||XX|  ||X| | |X|_/|X| /__/   | |X|/|X| | |X     X| | |X|_/|X| /__/   | |X|/|X|  | |X\/_/X|  | |X|___/ \n"
-    tic-tac-toe += "   ||XX|  ||X|  \ \XXXX/         \ \XXXX/   \ \XXXXXX|  \ \XXXX/          \ \XXX/    \ \XXXX/    \ \XXXXX|\n"
-    tic-tac-toe += "   |/_/   |/_/   \____/           \____/     \______ |   \____/            \___/      \____/      \_____/"
+    tictactoe = "  _________                         _                                       _\n"
+    tictactoe += " /XXXXXXXXX|                      /|X|                                    /|X|\n"
+    tictactoe += "|/_ |XX|___/_    ______           ||X|_                  ______           ||X|                    ______\n"
+    tictactoe += "   ||XX|   /X|  / /XXXX\        /|XXXXX|     ________   / /XXXX\        /|XXXXX|      ______     / /XXXX\ \n"
+    tictactoe += "   ||XX|  |/_  | |X|_/|X|  ___ |_  |X|/     / / XXXXX| | |X|_/|X|  ___ |_  |X|/      / /XXXX\   | |X|__/X| \n"
+    tictactoe += "   ||XX|  /|X| | |X| / _  /XXX|  | |X|  _  | |X     X| | |X| / _  /XXX|  | |X|  _   | |X/\ \X|  | |XXXXXX| \n"
+    tictactoe += "   ||XX|  ||X| | |X|_/|X| /__/   | |X|/|X| | |X     X| | |X|_/|X| /__/   | |X|/|X|  | |X\/_/X|  | |X|___/ \n"
+    tictactoe += "   ||XX|  ||X|  \ \XXXX/         \ \XXXX/   \ \XXXXXX|  \ \XXXX/          \ \XXX/    \ \XXXX/    \ \XXXXX|\n"
+    tictactoe += "   |/_/   |/_/   \____/           \____/     \______ |   \____/            \___/      \____/      \_____/"
 
-    print(tic-tac-toe)
+    print(tictactoe)
 
 def graphic_gameover(winner, mode):
     winner = " ___                      _____\n/\XX\        ____        / /XX/\n\ \XX\      / /XX\      / /XX/      _    ________     ________      ______      _______\n"
@@ -128,7 +135,7 @@ def get_ai_move(board, player): #Bori
         return 2, 2
     elif board[1][1]  != "." and board[1][1] == board[2][2]:
         return 0, 0
-    elif (board[0][0]  != "." and board[0][2]  != ".") and (board[0][0] == board[2][2] or board[0][2] == board[2][0]:)
+    elif (board[0][0]  != "." and board[0][2]  != ".") and (board[0][0] == board[2][2] or board[0][2] == board[2][0]):
         return 1, 1
     elif board[0][2]  != "." and board[0][2] == board[1][1]:
         return 2, 0
@@ -211,8 +218,6 @@ def print_board(board):
     print( "2  " + board[1][0] + " | " + board[1][1] + " | " + board[1][2])
     print("  ---+---+---")
     print( "3  " + board[2][0] + " | " + board[2][1] + " | " + board[2][2])
-    ask_field()
-    clear()
 
 def print_result(winner, mode): #Bori
     """Congratulates winner or proclaims tie (if winner equals zero)."""
@@ -222,7 +227,7 @@ def print_result(winner, mode): #Bori
         #print("Congratulations, Player" + str(winner) + "! You won!")
         graphic_gameover(winner, mode)
 
-    if input("Do you want to save the results?\n1: Yes\n2: No\nYour answer: ") == "1":
+    if input("\nDo you want to save the results?\n1: Yes\n2: No\nYour answer: ") == "1":
         if mode == "HUMAN-HUMAN":
             name1 = input("Player1, please give me your name: ")
             name2 = input("Player2, please give me your name: ")
@@ -232,6 +237,7 @@ def print_result(winner, mode): #Bori
             save("Artificial Intelligence", name1, winner) #This is not good right like this. Waits for correction.
         else:
             save("Artificial Intelligence", "Artificial Intelligence", 1)
+    clear_board()
 
     if input("Do you want to play again?\n1: Yes\n2: No\nYour answer: ") == "1":
         self.main_menu()
@@ -305,7 +311,7 @@ def check_scores(*args):
         this_player = False
         for line in load.readlines():
             if line[:len(name)] == name or this_player:
-                print line
+                print(line)
                 this_player = True
             elif line == "":
                 this_player = False
@@ -324,6 +330,7 @@ def tictactoe_game(mode): #Bori
 
     sign = {1: "X", 2: "O"}
     while not has_won(board, current_player) and not is_full(board):
+        clear_board()
 
         if mode == 'HUMAN-HUMAN' or current_player != ai_turn:
             print("Player" + current_player + ", it's your turn!")
@@ -347,6 +354,7 @@ def tictactoe_game(mode): #Bori
             break
         current_player = (current_player % 2) + 1
 
+    clear_board()
     print_board(board)
     print_result(winner, mode)
 
