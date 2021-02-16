@@ -149,7 +149,8 @@ def get_ai_move(board, player): #Bori
 
 def mark(board, player, row, col): #Davies
     """Marks the element at row & col on the board for player."""
-    pass
+    sign = {1: "X", 2: "O"}
+    board[row][col] = sign[player]
 
 
 def has_won(board, player): #Bori
@@ -343,6 +344,8 @@ def tictactoe_game(mode): #Bori
 
 def main_menu(): #Davies
     tictactoe_game('HUMAN-HUMAN')
+    tictactoe_game('HUMAN-AI')
+    save('SAVE GAME')
 
 if __name__ == '__main__':
     main_menu()
