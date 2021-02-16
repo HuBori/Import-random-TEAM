@@ -351,13 +351,14 @@ def main_menu(): #Davies
     print('[0] exit')
 
     option = input('Enter Your option! ')
-    while option != 0:
-        if option == 1:
+    while option != '0':
+        if option == '1':
             tictactoe_game('HUMAN-HUMAN')
-        elif option == 2:
+        elif option == '2':
             tictactoe_game('HUMAN-AI')
-        elif option == 3:
+        elif option == '3':
             check_scores(input('Who\'s Score are you courious of? '))
-
+            
+            
 if __name__ == '__main__':
     main_menu()
