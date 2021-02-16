@@ -76,40 +76,22 @@ def init_board(): #Davies
     board = [[".", ".", "."], [".", ".", "."], [".", ".", "."]]
     return board
 
-def get_move(board, player): #Davies
-    position = input('Enter position: ')
-    if position.lower() == 'a1':
-        board[0][0] = 'x' or '0'
-        clear()
-    elif position.lower() == 'a2':
-        board[1][0] = 'x' or '0'
-        clear()
-    elif position.lower() == 'a3':
-        board[2][0] = 'x' or '0'
-        clear()
-    elif position.lower() == 'b1':
-        board[0][1] = 'x' or '0'
-        clear()
-    elif position.lower() == 'b2':
-        board[1][1] = 'x' or '0'
-        clear()
-    elif position.lower() == 'b3':
-        board[2][1] = 'x'
-        clear()
-    elif position.lower() == 'c1':
-        board[0][2] = 'x'
-        clear()
-    elif position.lower() == 'c2':
-        board[1][2] = 'x'
-        clear()
-    elif position.lower() == 'c3':
-        board[2][2] = 'x'
-        clear()
-    else:
-        print('Please enter valid position! ')
-        time.sleep(1)
-        clear()
-    print_table()
+def get_move():
+    valid = False
+    while not valid:
+        position = input('Choose field: ')
+
+        if position[0].isalpha() and position[1].isnumeric():
+            if position[1] <= 3 and position[1] >= 1:
+                abc = ('a', 'b', 'c')
+                column = -1
+                for letter in range(len(abc)):
+                    if position[0] == letter:
+                        column == letter
+                    row = int(position[1])- 1
+                if column >= 0 and column < 3:
+                    valid = True
+                    return tuple(row, column)
 
 
 def get_ai_move(board, player): #Bori
