@@ -66,7 +66,7 @@ def graphic_gameover(winner, mode):
 
 def init_board(): #Davies
     """Returns an empty 3-by-3 board (with .)."""
-    board = []
+    board = [[".", ".", "."], [".", ".", "."], [".", ".", "."]]
     return board
 
 def get_move(board, player): #Davies
