@@ -60,7 +60,7 @@ def graphic_gameover(winner, mode):
         time.sleep(3)
         print(winner)
     elif winner != 3:
-        which = random.radnint(1,2)
+        which = random.randint(1,2)
         print("Congratulations! Player" + str(which) + " is the")
         for i in range(3):
             time.sleep(1)
@@ -168,8 +168,8 @@ def has_won(board, player): #Bori
 
     for r in range(len(board)):
         row = True
-        for c in range(len(board)-1):
-            if board[r][c] != board[r][c+1] or board[r][c] != sign[player]:
+        for c in range(len(board) - 1):
+            if board[r][c] != board[r][c-1] or board[r][c] != sign[player]: # board[r][c + 1] -- [c - 1]
                 row = False
         if row:
             return True
@@ -177,7 +177,7 @@ def has_won(board, player): #Bori
     for c in range(len(board)):
         column = True
         for r in range(len(board) - 1):
-            if board[r][c] != sign[player] or board[r][c] != board[r][c+1]:
+            if board[r][c] != sign[player] or board[r][c] != board[r][c-1]: # board[r][c + 1] -- [c - 1]
                 column = False
         if column:
             return True
