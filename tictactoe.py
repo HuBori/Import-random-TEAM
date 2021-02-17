@@ -213,20 +213,28 @@ def print_result(winner, mode): #Bori
             save(name1, name2, winner)
         elif mode == "HUMAN-AI":
             name1 = input("Please give me your name: ")
-            save("Artificial Intelligence", name1, winner) #This is not good right like this. Waits for correction.
+            save("Artificial Intelligence", name1, winner-1) #This is not good like this. Waits for correction.
         else:
-            save("Artificial Intelligence", "Artificial Intelligence", 1)
+            save("Artificial Intelligence", "Artificial Intelligence", 0)
     clear_board()
 
 def save(name1, name2, winner):
     with open("results.txt", "r") as save:
         is_1 = False
         is_2 = False
+        content = []
         for line in save.readlines():
             content.append(line)
+            this_player = False
             if line[:len(name1)] == name1:
                 is_1 = True
-                score = int(line[len(name1)+1:-1])
+                #line = name1 (0)
+                sc_str = line.split('(')[1]
+                sc_str = sc_str.split(")")[0]
+                if "-" in sc_str:
+                    score = -abs(int(sc_str[1:]))
+                else:
+                    score = int(sc_str)
                 if winner == name1:
                     score += 1
                 else:
@@ -237,9 +245,9 @@ def save(name1, name2, winner):
                 n = name2
             elif this_player and line[0] == "\t":
                 if line[1:len(n)+1] == n:
-                    matches = int(line[len(n)+3:])
+                    matches = int(line[len(n)+3:-len(" matches")])
                     matches += 1
-                    line= "\t" + n + ": " + str(matches) + " matches"
+                    line= "\t" + n + ": " + str(matches) + " matches\n"
                     changed = True
             elif line == "" and not changed:
                 this_player = False
@@ -247,7 +255,12 @@ def save(name1, name2, winner):
 
             elif line[:len(name2)] == name2:
                 is_2 = True
-                score = int(line[len(name1)+1:-1])
+                sc_str = line.split('(')[1]
+                sc_str = sc_str.split(")")[0]
+                if "-" in sc_str:
+                    score = -abs(int(sc_str[1:]))
+                else:
+                    score = int(sc_str)
                 if winner == name2:
                     score += 1
                 else:
@@ -261,15 +274,15 @@ def save(name1, name2, winner):
                 score = 1
             else:
                 score = -1
-            content.append(name1 + " (" + str(score) + ")\n\t" + name2 + ": 0")
+            content.append(name1 + " (" + str(score) + ")\n\t" + name2 + ": 1 matches")
         if not is_2:
             if winner == 2:
                 score = 1
             else:
                 score = -1
-            content.append(name2 + " (" + str(score) + ")\n\t" + name1 + ": 0")
+            content.append(name2 + " (" + str(score) + ")\n\t" + name1 + ": 1 matches")
 
-    with open(results.txt, "w") as save:
+    with open('results.txt', "w") as save:
         new = ""
         for line in content:
             new += line + "\n"
@@ -282,12 +295,13 @@ def check_scores(*args):
     else:
         name = args[0]
         this_player = False
-        for line in load.readlines():
-            if line[:len(name)] == name or this_player:
-                print(line)
-                this_player = True
-            elif line == "":
-                this_player = False
+        with open("results.txt", "r") as load:
+            for line in load.readlines():
+                if line[:len(name)] == name or this_player:
+                    print(line)
+                    this_player = True
+                elif line == "":
+                    this_player = False
 
 def tictactoe_game(mode): #Bori
     board = init_board()
@@ -353,6 +367,7 @@ def main_menu(): #Davies
             break
         elif option == '3':
             check_scores(input('Who\'s Score are you courious of? '))
+            break
     
             
             
