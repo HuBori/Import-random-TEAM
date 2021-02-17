@@ -182,6 +182,12 @@ def get_ai_move(board, player): #Bori
             return i[0], i[1]
     # 5th What is left?
 
+    for r in range(len(board)):
+        for c in range(len(board)):
+            if board[r][c] == ".":
+                print("I chose: " + letters[c] + str(r+1))
+                return r, c
+
     print("I didn't choose anything, becouse I'm stupid.")
     return None
 
@@ -360,21 +366,20 @@ def tictactoe_game(mode): #Bori
     while not has_won(board, current_player) and not is_full(board):
         clear_board()
 
-        if mode == 'HUMAN-HUMAN' or current_player != ai_turn:
+        if mode == 'HUMAN-HUMAN' or (mode != 'AI-AI' and current_player != ai_turn):
             print("Player" + str(current_player) + ", it's your turn!\n")
             print_board(board)
             position = get_move(board, current_player)
-        elif mode == 'HUMAN-AI' and str(current_player) == ai_turn:
-            print("It's my turn.\n")
-            print_board(board)
-            position = get_ai_move(board, player)
-            time.sleep(1.5)
-        else: # AI vs AI
-            time.sleep(0.1)
-            print("It's " + sign[current_player] + "'s turn.\n")
+        elif (mode == 'HUMAN-AI' and str(current_player) == ai_turn) or mode == 'AI-AI':
+            if mode == 'AI-AI':
+                print("It's " + sign[current_player] + "'s turn.\n")
+            else:
+                print("It's my turn.\n")
             print_board(board)
             position = get_ai_move(board, current_player)
-            time.sleep(1.5)
+            time.sleep(1)
+        else:
+            print("This should never happen.")
         mark(board, current_player, position[0], position[1])
 
         if has_won(board, current_player):
@@ -397,7 +402,8 @@ def tictactoe_game(mode): #Bori
 def main_menu(): #Davies
     print('[1] HUMAN vs. HUMAN')
     print('[2] HUMAN vs. AI')
-    print('[3] HIGH SCORES')
+    print('[3] AI vs AI')
+    print('[4] HIGH SCORES')
     print('[0] exit')
 
     option = input('Enter Your option! ')
@@ -409,7 +415,11 @@ def main_menu(): #Davies
             tictactoe_game('HUMAN-AI')
             break
         elif option == '3':
+            tictactoe_game('AI-AI')
+            break
+        elif option == '4':
             check_scores(input('Who\'s Score are you courious of? '))
+            break
         else:
             clear_board()
             print('\nINVALID\n')
