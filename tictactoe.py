@@ -49,25 +49,25 @@ def graphic_gameover(player, mode):
 
 
     if mode == "HUMAN-AI" and player == 0:
-        print("I won!")
+        print("\nI won!")
         looser = ""
         print(looser)
     elif mode == "HUMAN-AI" and player == 1:
-        print("Congratularions! You are the")
+        print("\nCongratularions! You are the")
         for i in range(3):
             time.sleep(1)
             print(".")
         time.sleep(1)
         print(winner)
     elif winner != -1:
-        print("Congratulations! Player" + str(player-1) + " is the")
+        print("\nCongratulations! Player" + str(player-1) + " is the")
         for i in range(3):
             time.sleep(1)
             print(".")
         time.sleep(1)
         print(winner)
     else:
-        print("You both are a\n" + looser)
+        print("\nYou both are a\n" + looser)
 
 def init_board(): #Davies
     """Returns an empty 3-by-3 board (with .)."""
@@ -158,21 +158,6 @@ def mark(board, player, row, col): #Davies
         else:
             print("Please give me a valid answer!")
             (row, col) = get_move(board, player)
-'''
-def won(board):
-    for i in range(3):
-        if board[i][0] == board[i][1] and board[i][2] == board[i][1]:
-            return True
-        if board[0][i] == board[1][i] and board[2][i] == board[0][i]:
-            return True
-    if board[0][0] == board[1][1] and board[2][2] == board[0][0]:
-        return True
-    elif board[0][2] == board[1][1] and board[2][0] == board[0][2]:
-        return True
-    else:
-        return False
- '''   
-
 
 def has_won(board, player): #Bori
     """Returns True if player has won the game."""
@@ -219,7 +204,7 @@ def print_result(winner, mode): #Bori
         #print("Congratulations, Player" + str(winner) + "! You won!")
         graphic_gameover(winner + 1, mode)
     else:
-        print("This should never happen.\n--print_results()")
+        graphic_gameover(winner, mode)
 
     if input("\nDo you want to save the results?\n1: Yes\n2: No\nYour answer: ") == "1":
         if mode == "HUMAN-HUMAN":
@@ -232,12 +217,6 @@ def print_result(winner, mode): #Bori
         else:
             save("Artificial Intelligence", "Artificial Intelligence", 1)
     clear_board()
-
-    if input("Do you want to play again?\n1: Yes\n2: No\nYour answer: ") == "1":
-        self.main_menu()
-    else:
-        print("Goodbye!")
-        quit()
 
 def save(name1, name2, winner):
     with open("results.txt", "r") as save:
@@ -335,7 +314,7 @@ def tictactoe_game(mode): #Bori
             print_board(board)
             position = get_ai_move(board, player)
         else:
-            time.sleep(1)
+            time.sleep(0.1)
             print("It's " + sign[current_player] + "'s turn.\n")
             print_board(board)
             position = get_ai_move(board, current_player)
@@ -344,7 +323,10 @@ def tictactoe_game(mode): #Bori
         if has_won(board, current_player):
             clear_board()
             print_board(board)
-            print_result(current_player, mode)
+            if mode == "HUMAN-AI":
+                print_result(0, mode)
+            else:
+                print_result(current_player, mode)
             break
         elif is_full(board):
             clear_board()
@@ -352,6 +334,7 @@ def tictactoe_game(mode): #Bori
             print_result(-1, mode)
             break
         current_player = (current_player % 2) + 1
+    
 
 
 def main_menu(): #Davies
@@ -364,11 +347,20 @@ def main_menu(): #Davies
     while option != '0':
         if option == '1':
             tictactoe_game('HUMAN-HUMAN')
+            break
         elif option == '2':
             tictactoe_game('HUMAN-AI')
+            break
         elif option == '3':
             check_scores(input('Who\'s Score are you courious of? '))
+    
             
             
 if __name__ == '__main__':
-    main_menu()
+    main_menu()    
+    clear_board()
+    if input("Do you want to play again?\n1: Yes\n2: No\nYour answer: ") == "1":
+        main_menu()
+    else:
+        print("Goodbye!")
+        quit()
