@@ -249,7 +249,7 @@ def print_result(winner, mode): #Bori
         #print("Congratulations, Player" + str(winner) + "! You won!")
         graphic_gameover(winner + 1, mode)
     else:
-        graphic_gameover(winner, mode)
+        graphic_gameover(1, mode)
 
     if input("\nDo you want to save the results?\n1: Yes\n2: No\nYour answer: ") == "1":
         if mode == "HUMAN-HUMAN":
@@ -357,6 +357,8 @@ def tictactoe_game(mode): #Bori
     current_player = 1
     winner = 0
     if mode == 'HUMAN-AI':
+        clear_board()
+        time.sleep(1)
         ai_turn = random.randint(1, 2)
         print("I am Player" + str(ai_turn))
     else:
@@ -370,7 +372,7 @@ def tictactoe_game(mode): #Bori
             print("Player" + str(current_player) + ", it's your turn!\n")
             print_board(board)
             position = get_move(board, current_player)
-        elif (mode == 'HUMAN-AI' and str(current_player) == ai_turn) or mode == 'AI-AI':
+        else:
             if mode == 'AI-AI':
                 print("It's " + sign[current_player] + "'s turn.\n")
             else:
@@ -378,16 +380,14 @@ def tictactoe_game(mode): #Bori
             print_board(board)
             position = get_ai_move(board, current_player)
             time.sleep(1)
-        else:
-            print("This should never happen.")
         mark(board, current_player, position[0], position[1])
 
         if has_won(board, current_player):
             clear_board()
             print_board(board)
-            if mode == "HUMAN-AI":
+            if mode == "HUMAN-AI" or mode == "AI-AI":
                 print_result(0, mode)
-            else:
+            elif mode == "HUMAN-HUMAN":
                 print_result(current_player, mode)
             break
         elif is_full(board):
@@ -420,6 +420,8 @@ def main_menu(): #Davies
         elif option == '4':
             check_scores(input('Who\'s Score are you courious of? '))
             break
+        elif option == '0':
+            quit()
         else:
             clear_board()
             print('\nINVALID\n')
