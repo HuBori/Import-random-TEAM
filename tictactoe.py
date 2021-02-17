@@ -357,12 +357,6 @@ def main_menu(): #Davies
     print('[3] HIGH SCORES')
     print('[0] exit')
 
-    def main_menu(): #Davies
-    print('[1] HUMAN vs. HUMAN')
-    print('[2] HUMAN vs. AI')
-    print('[3] HIGH SCORES')
-    print('[0] exit')
-
     option = input('Enter Your option! ')
     while option != '0':
         if option == '1':
