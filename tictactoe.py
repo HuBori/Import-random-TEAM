@@ -97,53 +97,84 @@ def get_move(board, player):
 def get_ai_move(board, player): #Bori
     """Returns the coordinates of a valid move for player on board."""
     sign = {1: "X", 2: "O"}
-    
+    letters = {0: 'A', 1: 'B', 2: 'C'}
+
+    #print("Step 1")
     for r in range(len(board)):
         if board[r][0] != "." and board[r][0] == board[r][1]:
-            return r, 2
+            if board[r][2] == ".":
+                print("I chose: C" + str(r+1))
+                return r, 2
         elif board[r][1]  != "." and board[1][1] == board[r][2]:
-            return r, 0
+            if board[r][0] == ".":
+                print("I chose: A" + str(r+1))
+                return r, 0
         elif board[r][0]  != "." and board[r][0] == board[r][2]:
-            return r, 1
+            if board[r][1] == ".":
+                print("I chose: B" + str(r+1))
+                return r, 1
         
         if board[0][r] != "." and board[0][r] == board[1][r]:
-            return 2, r
+            if board[2][r] == ".":
+                print("I chose: " + letters[r] + "3")
+                return 2, r
         elif board[1][r] != "." and board[1][r] == board[2][r]:
-            return 0, r
+            if board[0][r] == ".":
+                print("I chose: " + letters[r] + "1")
+                return 0, r
         elif board[0][r] != "." and board[0][r] == board[2][r]:
-            return 1, r
+            if board[1][r] == ".":
+                print("I chose: " + letters[r] + "2")
+                return 1, r
         
     if board[0][0]  != "." and board[0][0] == board[1][1]:
-        return 2, 2
+        if board[2][2] == ".":
+            print("I chose: C3")
+            return 2, 2
     elif board[1][1]  != "." and board[1][1] == board[2][2]:
-        return 0, 0
+        if board[0][0] == ".":
+            print("I chose: A1")
+            return 0, 0
     elif (board[0][0]  != "." and board[0][2]  != ".") and (board[0][0] == board[2][2] or board[0][2] == board[2][0]):
-        return 1, 1
+        if board[1][1] == ".":
+            print("I chose: B2")
+            return 1, 1
     elif board[0][2]  != "." and board[0][2] == board[1][1]:
-        return 2, 0
+        if board[2][0] == ".":
+            print("I chose: C1")
+            return 2, 0
     elif board[1][1]  != "." and board[1][1] == board[2][0]:
-        return 0, 2
+        if board[0][2] == ".":
+            print("I chose: A3") #Írd meg így a többi sort is (feljebb)
+            return 0, 2
     # 1st step: Check if two in a row for me
     # 2nd step: Check if two in a row for player
 
+    #print("Step 2")
     if board[1][1] == ".":
+        print("I chose: B2")
         return 1, 1
     # 3rd step: Get middle if empty
 
+    #print("Step 3")
     corners = [[0,0], [2,2], [0,2], [2,0]]
     random.shuffle(corners)
     for i in corners:
         if board[i[0]][i[1]] == ".":
+            print("I chose: " + letters[i[0]] + str(i[1]+1))
             return i[0], i[1]
     # 4th step: Get corner if empty
 
+    #print("Step 4")
     for i in corners:
         i[0] = (i[0]+1) % 3
         i[1] = (i[1]+1) % 3
         if board[i[0]][i[1]] == ".":
+            print("I chose: " + letters[i[0]] + str(i[1]+1))
             return i[0], i[1]
     # 5th What is left?
 
+    print("I didn't choose anything, becouse I'm stupid.")
     return None
 
 
@@ -274,24 +305,25 @@ def save(name1, name2, winner):
                 score = 1
             else:
                 score = -1
-            content.append(name1 + " (" + str(score) + ")\n\t" + name2 + ": 1 matches")
+            content.append(name1 + " (" + str(score) + ")\n\t" + name2 + ": 1 matches\n")
         if not is_2:
             if winner == 2:
                 score = 1
             else:
                 score = -1
-            content.append(name2 + " (" + str(score) + ")\n\t" + name1 + ": 1 matches")
+            content.append(name2 + " (" + str(score) + ")\n\t" + name1 + ": 1 matches\n")
 
     with open('results.txt', "w") as save:
         new = ""
         for line in content:
-            new += line + "\n"
+            new += line
         save.write(new)
 
 def check_scores(*args):
     if len(args) == 0:
         with open("results.txt", "r") as load:
             print(load.read())
+            trash = input("If you read all, press ENTER!")
     else:
         name = args[0]
         this_player = False
@@ -302,6 +334,7 @@ def check_scores(*args):
                     this_player = True
                 elif line == "":
                     this_player = False
+        trash = input("If you read all, press ENTER!")
 
 def tictactoe_game(mode): #Bori
     board = init_board()
@@ -327,11 +360,13 @@ def tictactoe_game(mode): #Bori
             print("It's my turn.\n")
             print_board(board)
             position = get_ai_move(board, player)
-        else:
+            time.sleep(1.5)
+        else: # AI vs AI
             time.sleep(0.1)
             print("It's " + sign[current_player] + "'s turn.\n")
             print_board(board)
             position = get_ai_move(board, current_player)
+            time.sleep(1.5)
         mark(board, current_player, position[0], position[1])
 
         if has_won(board, current_player):
@@ -371,6 +406,7 @@ def main_menu(): #Davies
             clear_board()
             print('\nINVALID\n')
             main_menu()
+    
             
             
 if __name__ == '__main__':
