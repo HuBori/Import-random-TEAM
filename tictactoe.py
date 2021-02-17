@@ -368,6 +368,8 @@ def main_menu(): #Davies
         elif option == '3':
             check_scores(input('Who\'s Score are you courious of? '))
             break
+        elif option == '0':
+            quit()
         else:
             clear_board()
             print("\nInvalid\n")
