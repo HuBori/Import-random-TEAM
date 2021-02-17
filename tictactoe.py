@@ -59,6 +59,14 @@ def graphic_gameover(player, mode):
             print(".")
         time.sleep(1)
         print(winner)
+    elif mode == "AI-AI":
+        print("I discussed it with myself,\nand we both agree that the result should be tie,\nso that we both are a\n")
+        for i in range(3):
+            time.sleep(1)
+            print(".")
+        time.sleep(1)
+        print(winner)
+        print("\n(I am so proud of myself! I should go and celebrate!)\n")
     elif winner != -1:
         print("\nCongratulations! Player" + str(player-1) + " is the")
         for i in range(3):
