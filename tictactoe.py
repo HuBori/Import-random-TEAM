@@ -357,6 +357,12 @@ def main_menu(): #Davies
     print('[3] HIGH SCORES')
     print('[0] exit')
 
+    def main_menu(): #Davies
+    print('[1] HUMAN vs. HUMAN')
+    print('[2] HUMAN vs. AI')
+    print('[3] HIGH SCORES')
+    print('[0] exit')
+
     option = input('Enter Your option! ')
     while option != '0':
         if option == '1':
@@ -367,12 +373,9 @@ def main_menu(): #Davies
             break
         elif option == '3':
             check_scores(input('Who\'s Score are you courious of? '))
-            break
-        elif option == '0':
-            quit()
         else:
             clear_board()
-            print("\nInvalid\n")
+            print('\nINVALID\n')
             main_menu()
             
             
