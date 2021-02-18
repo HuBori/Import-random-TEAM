@@ -297,106 +297,112 @@ def print_result(winner, mode): #Bori
             save(name1, name2, winner)
         elif mode == "HUMAN-AI":
             name1 = input("Please give me your name: ")
-            save("Artificial Intelligence", name1, winner-1)
+            save("Artificial Intelligence", name1, winner)
         else:
-            save("Artificial Intelligence", "Artificial Intelligence", 0)
+            save("Artificial Intelligence", "Artificial Intelligence", -1)
         play_again()
     else:
         main_menu()
 
-def save(name1, name2, winner):
-    with open("results.txt", "r") as save:
-        is_1 = False
-        is_2 = False
-        content = []
-        for line in save.readlines():
-            content.append(line)
-            this_player = False
-            if line[:len(name1)] == name1:
-                is_1 = True
-                sc_str = line.split('(')[1]
-                sc_str = sc_str.split(")")[0]
-                if "-" in sc_str:
-                    score = -abs(int(sc_str[1:]))
-                else:
-                    score = int(sc_str)
-                if winner == name1:
-                    score += 1
-                else:
-                    score -= 1
-                line = name1 + " (" + str(score) + ")"
-                this_player = True
-                changed = False
-                n = name2
-            elif this_player and line[0] == "\t":
-                if line[1:len(n)+1] == n:
-                    matches = int(line[len(n)+3:-len(" matches")])
-                    matches += 1
-                    line= "\t" + n + ": " + str(matches) + " matches\n"
-                    changed = True
-            elif line == "" and not changed:
-                this_player = False
-                line = "\t" + name2 + ": " + str(1) + " matches\n"
+#____________________________________________________________________________        
 
-            elif line[:len(name2)] == name2:
-                is_2 = True
-                sc_str = line.split('(')[1]
-                sc_str = sc_str.split(")")[0]
-                if "-" in sc_str:
-                    score = -abs(int(sc_str[1:]))
-                else:
-                    score = int(sc_str)
-                if winner == name2:
-                    score += 1
-                else:
-                    score -= 1
-                line = name1 + " (" + str(score) + ")"
-                this_player = True
-                changed = False
-                n = name1
-        if not is_1:
-            if winner == 1:
-                score = 1
-            else:
-                score = -1
-            content.append(name1 + " (" + str(score) + ")\n\t" + name2 + ": 1 matches\n")
-        if not is_2:
-            if winner == 2:
-                score = 1
-            else:
-                score = -1
-            content.append(name2 + " (" + str(score) + ")\n\t" + name1 + ": 1 matches\n")
+def find_name(contents, name, winner, order):
+    changed = len(contents)
+    for c in range(len(contents)):
+        line = contents[c]
+        if name in line and " (" in line:
+            line = line.split(" (")[1]
+            score = int(line.split(")")[0]) #Folytasd tovább!
+            if winner == order:
+                score += 1
+            elif winner != -1:
+                score -= 1
+            contents[c] = name + " (" + str(score) + ")"
+            changed = c
+    return contents, changed
 
+def append_name(contents, changed, winner, name, order):
+    if changed == len(contents):
+        score = 0
+        if winner == order:
+            score += 1
+        elif winner != -1:
+            score -= 1
+        contents.append("\n" + name + " (" + str(score) + ")")
+    return contents
+        
+
+def change_matches(contents, changed, name):
+    if contents[changed] == contents[-1]:
+        contents.append(str("\t" + name + ": 1"))
+    else:
+        is_match = False
+        c = changed + 1
+        while c < len(contents):
+            if contents[c][0] != "\t":
+                end = c
+                break
+            elif name in contents[c]:
+                line = contents[c].split(": ")[1]
+                matches = int(line.split(" ")[0]) + 1
+                contents[c] = str(name + ": " + str(matches) + " matches")
+                is_match = True
+            c += 1
+        if not is_match:
+            contents.insert(c, str("\t" + name + ": 1 matches"))
+    return contents
+
+def save_rewrite_file(lines):  
     with open('results.txt', "w") as save:
         new = ""
-        for line in content:
-            new += line
+        for line in lines:
+            new += line + "\n"
         save.write(new)
 
+
+def save(name1, name2, winner):
+    with open("results.txt", "r") as save:
+        contents = []
+        for l in save.readlines():
+            contents.append(l)
+
+        contents, changed = find_name(contents, name1, winner, 1)
+        contents = append_name(contents, changed, winner, name1, 1)
+        change_matches(contents, changed, name2)
+
+        contents, changed = find_name(contents, name2, winner, 2)
+        contents = append_name(contents, changed, winner, name2, 2)
+        change_matches(contents, changed, name1)
+
+        save_rewrite_file(contents)
     play_again()
 
-def check_scores(*args):
-    if len(args) == 0:
+def check_scores(name):
+    clear_board()
+    result = ""
+    if name == "all":
         with open("results.txt", "r") as load:
-            print(load.read())
-            trash = input("If you read all, press ENTER!")
+            for l in load.readlines():
+                result += l
     else:
-        name = args[0]
         this_player = False
         valid = False
         with open("results.txt", "r") as load:
             for line in load.readlines():
                 if line[:len(name)] == name or this_player:
-                    print(line)
+                    result += line
                     this_player = True
                     valid = True
-                elif line == "":
+                elif line[0] != "\t":
                     this_player = False
             if not valid:
                 print("There is no saved data with this username.")
                 check_scores()
-        trash = input("If you read all, press ENTER!")
+    print(result)
+    trash = input("If you read all, press ENTER!")
     main_menu()
+
+#______________________________________________________________________________
 
 def tictactoe_game(mode): #Bori
     board = init_board()
