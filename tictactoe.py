@@ -13,6 +13,7 @@ def clear_board():
     
 
 def graphic_welcome():
+    clear_board()
     print("Welcome to")
     for i in range(3):
         time.sleep(1)
@@ -29,6 +30,7 @@ def graphic_welcome():
     tictactoe += "   |/_/   |/_/   \____/           \____/     \______ |   \____/            \___/      \____/      \_____/"
 
     print(tictactoe)
+    time.sleep(3)
 
 def graphic_gameover(player, mode):
     winner = " ___                      _____\n/\XX\        ____        / /XX/\n\ \XX\      / /XX\      / /XX/      _    ________     ________      ______      _______\n"
@@ -288,6 +290,7 @@ def print_result(winner, mode): #Bori
         graphic_gameover(0, mode)
 
     time.sleep(2)
+    clear_board()
     if input("\nDo you want to save the results?\n1: Yes\n2: No\nYour answer: ") == "1":
         if mode == "HUMAN-HUMAN":
             name1 = input("Player1, please give me your name: ")
@@ -436,9 +439,19 @@ def tictactoe_game(mode): #Bori
             break
         current_player = (current_player % 2) + 1
     
-
+def graphic_menu():
+    menu = ""
+    menu += " ___  ___   _______   ___     _   _     _\n"
+    menu += "|   \/   | |  _____| |   \   | | | |   | |\n"
+    menu += "| |\__/| | | |__     | |\ \  | | | |   | |\n"
+    menu += "| |    | | |  __|    | | \ \ | | | |   | |\n"
+    menu += "| |    | | | |_____  | |  \ \| | | |___| |\n"
+    menu += "|_|    |_| |_______| |_|   \___|  \_____/\n"
+    print(menu)
 
 def main_menu(): #Davies
+    clear_board()
+    graphic_menu()
     print('[1] HUMAN vs. HUMAN')
     print('[2] HUMAN vs. AI')
     print('[3] AI vs AI')
@@ -460,6 +473,7 @@ def main_menu(): #Davies
             check_scores(input('Who\'s Score are you courious of? '))
             break
         elif option == '0':
+            print("Goodbye!")
             quit()
         else:
             clear_board()
@@ -475,4 +489,5 @@ def play_again():
         quit()
             
 if __name__ == '__main__':
+    graphic_welcome()
     main_menu()
