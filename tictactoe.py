@@ -16,9 +16,9 @@ def graphic_welcome():
     clear_board()
     print("Welcome to")
     for i in range(3):
-        time.sleep(1)
+        time.sleep(0.5)
         print(".")
-    time.sleep(2)
+    time.sleep(1)
     tictactoe = "  _________                         _                                       _\n"
     tictactoe += " /XXXXXXXXX|                      /|X|                                    /|X|\n"
     tictactoe += "|/_ |XX|___/_    ______           ||X|_                  ______           ||X|                    ______\n"
@@ -63,7 +63,7 @@ def graphic_gameover(player, mode):
     elif mode == "HUMAN-AI" and player == 1:
         print("\nCongratularions! You are the")
         for i in range(3):
-            time.sleep(1)
+            time.sleep(0.5)
             print(".")
         time.sleep(1)
         print(winner)
@@ -72,7 +72,7 @@ def graphic_gameover(player, mode):
         clear_board()
         print("I discussed it with myself,\nand we both agree that the result should be tie,\nso that we both are a\n")
         for i in range(3):
-            time.sleep(1)
+            time.sleep(0.5)
             print(".")
         time.sleep(2)
         print(winner)
@@ -80,7 +80,7 @@ def graphic_gameover(player, mode):
     elif winner != -1:
         print("\nCongratulations! Player" + str(player-1) + " is the")
         for i in range(3):
-            time.sleep(1)
+            time.sleep(0.5)
             print(".")
         time.sleep(1)
         print(winner)
@@ -98,19 +98,26 @@ def get_move(board, player):
     while not valid:
         position = input('\nChoose field: ')
 
-        if position[0].isalpha() and position[1].isnumeric():
-            if int(position[1]) <= 3 and int(position[1]) >= 1:
+        if position[0].isalpha() and position[1].isnumeric() or position[1].isalpha() and position[0].isnumeric():
+            if position[1].isnumeric():
+                number = position[1]
+                alpha = position[0]
+            else:
+                number = position[0]
+                alpha = position[1]
+            if int(number) <= 3 and int(number) >= 1:
                 abc = ['a', 'b', 'c']
                 column = -1
                 for letter in range(len(abc)):
-                    if position[0].lower() == abc[letter]:
+                    if alpha.lower() == abc[letter]:
                         column = letter
-                row = int(position[1])- 1
+                row = int(number)- 1
                 if column >= 0 and column < 3:
                     valid = True
                     return (row, column)
         elif position == 'quit':
             quit()
+        print("This is not a valid answer!")
 
 
 def get_ai_move(board, player): #Bori
@@ -281,7 +288,7 @@ def print_result(winner, mode): #Bori
     else:
         graphic_gameover(0, mode)
 
-    time.sleep(2)
+    time.sleep(5)
     clear_board()
     if input("\nDo you want to save the results?\n1: Yes\n2: No\nYour answer: ") == "1":
         if mode == "HUMAN-HUMAN":
@@ -295,7 +302,7 @@ def print_result(winner, mode): #Bori
             save("Artificial Intelligence", "Artificial Intelligence", 0)
         play_again()
     else:
-        play_again()
+        main_menu()
 
 def save(name1, name2, winner):
     with open("results.txt", "r") as save:
@@ -366,6 +373,8 @@ def save(name1, name2, winner):
             new += line
         save.write(new)
 
+    play_again()
+
 def check_scores(*args):
     if len(args) == 0:
         with open("results.txt", "r") as load:
@@ -374,14 +383,20 @@ def check_scores(*args):
     else:
         name = args[0]
         this_player = False
+        valid = False
         with open("results.txt", "r") as load:
             for line in load.readlines():
                 if line[:len(name)] == name or this_player:
                     print(line)
                     this_player = True
+                    valid = True
                 elif line == "":
                     this_player = False
+            if not valid:
+                print("There is no saved data with this username.")
+                check_scores()
         trash = input("If you read all, press ENTER!")
+    main_menu()
 
 def tictactoe_game(mode): #Bori
     board = init_board()
@@ -444,9 +459,9 @@ def main_menu(): #Davies
     graphic_menu()
     print('[1] HUMAN vs. HUMAN')
     print('[2] HUMAN vs. AI')
-    print('[3] AI vs AI')
+    print('[3] AI vs. AI')
     print('[4] HIGH SCORES')
-    print('[0] exit')
+    print('[0] EXIT')
 
     option = input('Enter Your option! ')
     while option != '0':
