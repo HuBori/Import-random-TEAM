@@ -48,7 +48,7 @@ def graphic_gameover(player, mode):
     looser += "|/________/    \____/      \____/    |______/      \_____/  |/_/\n"
 
 
-    if player == -1:
+    if player == -1 and mode != "AI-AI":
         who = ""
         if mode == "HUMAN-AI":
             who = "We"
@@ -271,7 +271,9 @@ def print_result(winner, mode): #Bori
             save("Artificial Intelligence", name1, winner-1) #This is not good like this. Waits for correction.
         else:
             save("Artificial Intelligence", "Artificial Intelligence", 0)
-    clear_board()
+        play_again()
+    else:
+        play_again()
 
 def save(name1, name2, winner):
     with open("results.txt", "r") as save:
@@ -437,13 +439,21 @@ def main_menu(): #Davies
             print('\nINVALID\n')
             main_menu()
     
-            
-            
-if __name__ == '__main__':
-    main_menu()    
+def play_again():        
     clear_board()
     if input("Do you want to play again?\n1: Yes\n2: No\nYour answer: ") == "1":
         main_menu()
     else:
         print("Goodbye!")
         quit()
+            
+if __name__ == '__main__':
+    main_menu()
+
+
+'''
+Szeretnék:
+A Menünek egy szép fejlécet, és hogy előtte cleareljük a táblát.
+No save esetén ne lépjen ki.
+Talán egy refactoring?
+'''
