@@ -117,53 +117,80 @@ def get_ai_move(board, player): #Bori
     letters = {0: 'A', 1: 'B', 2: 'C'}
 
     #print("Step 1")
+    can_win = False
+    best_option = []
     for r in range(len(board)):
-        if board[r][0] != "." and board[r][0] == board[r][1]:
-            if board[r][2] == ".":
+        if board[r][0] != "." and board[r][0] == board[r][1] and board[r][2] == ".":
+            if board[r][2] == sign[player]:
                 print("I chose: C" + str(r+1))
                 return r, 2
-        elif board[r][1]  != "." and board[1][1] == board[r][2]:
-            if board[r][0] == ".":
+            else:
+                best_option = [r, 2]
+        elif board[r][1]  != "." and board[1][1] == board[r][2] and board[r][0] == ".":
+            if board[r][0] == sign[player]:
                 print("I chose: A" + str(r+1))
                 return r, 0
-        elif board[r][0]  != "." and board[r][0] == board[r][2]:
-            if board[r][1] == ".":
+            else:
+                best_option = [r, 0]
+        elif board[r][0]  != "." and board[r][0] == board[r][2] and board[r][1] == ".":
+            if board[r][1] == sign[player]:
                 print("I chose: B" + str(r+1))
                 return r, 1
+            else:
+                best_option = [r, 1]
         
-        if board[0][r] != "." and board[0][r] == board[1][r]:
-            if board[2][r] == ".":
+        if board[0][r] != "." and board[0][r] == board[1][r] and board[2][r] == ".":
+            if board[2][r] == sign[player]:
                 print("I chose: " + letters[r] + "3")
                 return 2, r
-        elif board[1][r] != "." and board[1][r] == board[2][r]:
-            if board[0][r] == ".":
+            else:
+                best_option = [2, r]
+        elif board[1][r] != "." and board[1][r] == board[2][r] and board[0][r] == ".":
+            if board[0][r] == sign[player]:
                 print("I chose: " + letters[r] + "1")
                 return 0, r
-        elif board[0][r] != "." and board[0][r] == board[2][r]:
+            else:
+                best_option = [0, r]
+        elif board[0][r] != "." and board[0][r] == board[2][r] and board[1][r] == ".":
             if board[1][r] == ".":
                 print("I chose: " + letters[r] + "2")
                 return 1, r
+            else:
+                best_option = [1, r]
         
-    if board[0][0]  != "." and board[0][0] == board[1][1]:
-        if board[2][2] == ".":
+    if board[0][0]  != "." and board[0][0] == board[1][1] and board[2][2] == ".":
+        if board[2][2] == sign[player]:
             print("I chose: C3")
             return 2, 2
-    elif board[1][1]  != "." and board[1][1] == board[2][2]:
-        if board[0][0] == ".":
+        else:
+            best_option = [2, 2]
+    elif board[1][1]  != "." and board[1][1] == board[2][2] and board[0][0] == ".":
+        if board[0][0] == sign[player]:
             print("I chose: A1")
             return 0, 0
-    elif (board[0][0]  != "." and board[0][2]  != ".") and (board[0][0] == board[2][2] or board[0][2] == board[2][0]):
-        if board[1][1] == ".":
+        else:
+            best_option = [0, 0]
+    elif (board[0][0]  != "." and board[0][2]  != ".") and (board[0][0] == board[2][2] or board[0][2] == board[2][0]) and board[1][1] == ".":
+        if board[1][1] == sign[player]:
             print("I chose: B2")
             return 1, 1
-    elif board[0][2]  != "." and board[0][2] == board[1][1]:
-        if board[2][0] == ".":
+        else:
+            best_option = [1, 1]
+    elif board[0][2]  != "." and board[0][2] == board[1][1] and board[2][0] == ".":
+        if board[2][0] == sign[player]:
             print("I chose: C1")
             return 2, 0
-    elif board[1][1]  != "." and board[1][1] == board[2][0]:
-        if board[0][2] == ".":
+        else:
+            best_option = [2, 0]
+    elif board[1][1]  != "." and board[1][1] == board[2][0] and board[0][2] == ".":
+        if board[0][2] == sign[player]:
             print("I chose: A3") #Írd meg így a többi sort is (feljebb)
             return 0, 2
+        else:
+            best_option = [0, 2]
+
+    if len(best_option) == 2:
+        return best_option[0], best_option[1]
     # 1st step: Check if two in a row for me
     # 2nd step: Check if two in a row for player
 
@@ -449,11 +476,3 @@ def play_again():
             
 if __name__ == '__main__':
     main_menu()
-
-
-'''
-Szeretnék:
-A Menünek egy szép fejlécet, és hogy előtte cleareljük a táblát.
-No save esetén ne lépjen ki.
-Talán egy refactoring?
-'''
