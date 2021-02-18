@@ -48,7 +48,14 @@ def graphic_gameover(player, mode):
     looser += "|/________/    \____/      \____/    |______/      \_____/  |/_/\n"
 
 
-    if mode == "HUMAN-AI" and player == 0:
+    if player == -1:
+        who = ""
+        if mode == "HUMAN-AI":
+            who = "We"
+        elif mode == "HUMAN-HUMAN":
+            who = "You"
+        print("\n" + who + " both are a\n" + looser)
+    elif mode == "HUMAN-AI" and player == 0:
         print("\nI won!")
         print(looser)
     elif mode == "HUMAN-AI" and player == 1:
@@ -59,11 +66,13 @@ def graphic_gameover(player, mode):
         time.sleep(1)
         print(winner)
     elif mode == "AI-AI":
+        time.sleep(2)
+        clear_board()
         print("I discussed it with myself,\nand we both agree that the result should be tie,\nso that we both are a\n")
         for i in range(3):
             time.sleep(1)
             print(".")
-        time.sleep(1)
+        time.sleep(2)
         print(winner)
         print("\n(I am so proud of myself! I should go and celebrate!)\n")
     elif winner != -1:
@@ -74,7 +83,8 @@ def graphic_gameover(player, mode):
         time.sleep(1)
         print(winner)
     else:
-        print("\nYou both are a\n" + looser)
+        print("There is no winner, no looser, and no tie, which is weird.")
+        
 
 def init_board(): #Davies
     """Returns an empty 3-by-3 board (with .)."""
@@ -218,8 +228,7 @@ def has_won(board, player): #Bori
             return True
         elif board[0][2] == board[1][1] and board[2][0] == board[1][1]:
             return True
-    else:
-        return False
+    return False
 
 
 def is_full(board): #Bori
@@ -251,6 +260,7 @@ def print_result(winner, mode): #Bori
     else:
         graphic_gameover(0, mode)
 
+    time.sleep(2)
     if input("\nDo you want to save the results?\n1: Yes\n2: No\nYour answer: ") == "1":
         if mode == "HUMAN-HUMAN":
             name1 = input("Player1, please give me your name: ")
@@ -382,18 +392,18 @@ def tictactoe_game(mode): #Bori
             time.sleep(1)
         mark(board, current_player, position[0], position[1])
 
-        if has_won(board, current_player):
+        if is_full(board) and not has_won(board, current_player):
+            clear_board()
+            print_board(board)
+            print_result(-1, mode)
+            break
+        elif has_won(board, current_player):
             clear_board()
             print_board(board)
             if mode == "HUMAN-AI" or mode == "AI-AI":
                 print_result(0, mode)
             elif mode == "HUMAN-HUMAN":
                 print_result(current_player, mode)
-            break
-        elif is_full(board):
-            clear_board()
-            print_board(board)
-            print_result(-1, mode)
             break
         current_player = (current_player % 2) + 1
     
