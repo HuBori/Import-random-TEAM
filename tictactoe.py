@@ -118,8 +118,8 @@ def get_ai_move(board, player): #Bori
     sign = {1: "X", 2: "O"}
     letters = {0: 'A', 1: 'B', 2: 'C'}
 
-    #print("Step 1")
-    can_win = False
+    # STEP 1
+    # Check rows
     best_option = []
     for r in range(len(board)):
         if board[r][0] != "." and board[r][0] == board[r][1] and board[r][2] == ".":
@@ -140,7 +140,8 @@ def get_ai_move(board, player): #Bori
                 return r, 1
             else:
                 best_option = [r, 1]
-        
+
+    # Check columns    
         if board[0][r] != "." and board[0][r] == board[1][r] and board[2][r] == ".":
             if board[2][r] == sign[player]:
                 print("I chose: " + letters[r] + "3")
@@ -159,7 +160,8 @@ def get_ai_move(board, player): #Bori
                 return 1, r
             else:
                 best_option = [1, r]
-        
+
+    # Check diagonals    
     if board[0][0]  != "." and board[0][0] == board[1][1] and board[2][2] == ".":
         if board[2][2] == sign[player]:
             print("I chose: C3")
@@ -186,52 +188,48 @@ def get_ai_move(board, player): #Bori
             best_option = [2, 0]
     elif board[1][1]  != "." and board[1][1] == board[2][0] and board[0][2] == ".":
         if board[0][2] == sign[player]:
-            print("I chose: A3") #Írd meg így a többi sort is (feljebb)
+            print("I chose: A3")
             return 0, 2
         else:
             best_option = [0, 2]
 
-    if len(best_option) == 2:
+    if len(best_option) == 2: # If can't win, prevents loosing
         return best_option[0], best_option[1]
-    # 1st step: Check if two in a row for me
-    # 2nd step: Check if two in a row for player
 
-    #print("Step 2")
+    # STEP 2: Get middle if empty
     if board[1][1] == ".":
         print("I chose: B2")
         return 1, 1
-    # 3rd step: Get middle if empty
 
-    #print("Step 3")
+    #STEP 3: Get corner if empty
     corners = [[0,0], [2,2], [0,2], [2,0]]
     random.shuffle(corners)
     for i in corners:
         if board[i[0]][i[1]] == ".":
             print("I chose: " + letters[i[0]] + str(i[1]+1))
             return i[0], i[1]
-    # 4th step: Get corner if empty
 
-    #print("Step 4")
+    # STEP 4: Get one of the leftover fields
     for i in corners:
         i[0] = (i[0]+1) % 3
         i[1] = (i[1]+1) % 3
         if board[i[0]][i[1]] == ".":
             print("I chose: " + letters[i[0]] + str(i[1]+1))
             return i[0], i[1]
-    # 5th What is left?
 
+    # In the very unlikely case it doesn't do any of the above, checks if there is any empty field.
     for r in range(len(board)):
         for c in range(len(board)):
             if board[r][c] == ".":
                 print("I chose: " + letters[c] + str(r+1))
                 return r, c
 
+    # In the even more unlikely case it still hasn't chosen, lets the user know that there is a mistake.
     print("I didn't choose anything, becouse I'm stupid.")
     return None
 
 
 def mark(board, player, row, col): #Davies
-    """Marks the element at row & col on the board for player."""
     sign = {1: "X", 2: "O"}
     valid = False
     while not valid:
@@ -243,8 +241,6 @@ def mark(board, player, row, col): #Davies
             (row, col) = get_move(board, player)
 
 def has_won(board, player): #Bori
-    """Returns True if player has won the game."""
-    #sign = {1: "X", 2: "O"}
     for i in range(3):
         if board[i][1] != ".":
             if board[i][0] == board[i][1] and board[i][2] == board[i][1]:
@@ -261,7 +257,6 @@ def has_won(board, player): #Bori
 
 
 def is_full(board): #Bori
-    """Returns True if board is full."""
     count = 0
     for r in board:
         for c in r:
@@ -277,14 +272,11 @@ def print_board(board):
     print("  ---+---+---")
     print( "3  " + board[2][0] + " | " + board[2][1] + " | " + board[2][2])
 
-def print_result(winner, mode): #Bori
-    """Congratulates winner or proclaims tie (if winner equals zero)."""
-    
+def print_result(winner, mode): #Bori    
     if winner == -1:
         print("\nGame Over! It's a tie.")
         graphic_gameover(winner, mode)
     elif winner == 1 or winner == 2:
-        #print("Congratulations, Player" + str(winner) + "! You won!")
         graphic_gameover(winner + 1, mode)
     else:
         graphic_gameover(0, mode)
@@ -298,7 +290,7 @@ def print_result(winner, mode): #Bori
             save(name1, name2, winner)
         elif mode == "HUMAN-AI":
             name1 = input("Please give me your name: ")
-            save("Artificial Intelligence", name1, winner-1) #This is not good like this. Waits for correction.
+            save("Artificial Intelligence", name1, winner-1)
         else:
             save("Artificial Intelligence", "Artificial Intelligence", 0)
         play_again()
@@ -315,7 +307,6 @@ def save(name1, name2, winner):
             this_player = False
             if line[:len(name1)] == name1:
                 is_1 = True
-                #line = name1 (0)
                 sc_str = line.split('(')[1]
                 sc_str = sc_str.split(")")[0]
                 if "-" in sc_str:
@@ -395,7 +386,6 @@ def check_scores(*args):
 def tictactoe_game(mode): #Bori
     board = init_board()
 
-    # use get_move(), mark(), has_won(), is_full(), and print_board() to create game logic
     current_player = 1
     winner = 0
     if mode == 'HUMAN-AI':
