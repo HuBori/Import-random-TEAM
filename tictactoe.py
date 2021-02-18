@@ -50,7 +50,6 @@ def graphic_gameover(player, mode):
 
     if mode == "HUMAN-AI" and player == 0:
         print("\nI won!")
-        looser = ""
         print(looser)
     elif mode == "HUMAN-AI" and player == 1:
         print("\nCongratularions! You are the")
@@ -245,11 +244,12 @@ def print_result(winner, mode): #Bori
     
     if winner == -1:
         print("\nGame Over! It's a tie.")
+        graphic_gameover(winner, mode)
     elif winner == 1 or winner == 2:
         #print("Congratulations, Player" + str(winner) + "! You won!")
         graphic_gameover(winner + 1, mode)
     else:
-        graphic_gameover(1, mode)
+        graphic_gameover(0, mode)
 
     if input("\nDo you want to save the results?\n1: Yes\n2: No\nYour answer: ") == "1":
         if mode == "HUMAN-HUMAN":
