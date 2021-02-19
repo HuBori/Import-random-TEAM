@@ -488,7 +488,8 @@ def main_menu(): #Davies
             quit()
         else:
             clear_board()
-            print('\nINVALID\n')
+            print('\nI don\'t understand this, please enter a number from 0 to 4!\n')
+            time.sleep(1.5)
             main_menu()
     
 def play_again():        
